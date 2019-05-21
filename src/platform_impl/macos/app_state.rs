@@ -188,7 +188,7 @@ pub enum AppState {}
 impl AppState {
     pub fn set_callback<F, T>(callback: F, window_target: RootWindowTarget<T>)
     where
-        F: 'static + FnMut(Event<T>, &RootWindowTarget<T>, &mut ControlFlow),
+        F: FnMut(Event<T>, &RootWindowTarget<T>, &mut ControlFlow),
         T: 'static,
     {
         *HANDLER.callback.lock().unwrap() = Some(Box::new(EventLoopHandler {

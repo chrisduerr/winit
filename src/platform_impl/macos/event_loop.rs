@@ -75,7 +75,7 @@ impl<T> EventLoop<T> {
     }
 
     pub fn run<F>(self, callback: F) -> !
-        where F: 'static + FnMut(Event<T>, &RootWindowTarget<T>, &mut ControlFlow),
+        where F: FnMut(Event<T>, &RootWindowTarget<T>, &mut ControlFlow),
     {
         unsafe {
             let _pool = NSAutoreleasePool::new(nil);

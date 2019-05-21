@@ -522,7 +522,7 @@ impl<T:'static> EventLoop<T> {
     }
 
     pub fn run<F>(self, callback: F) -> !
-        where F: 'static + FnMut(::event::Event<T>, &RootELW<T>, &mut ControlFlow)
+        where F: FnMut(::event::Event<T>, &RootELW<T>, &mut ControlFlow)
     {
         match self {
             EventLoop::Wayland(evlp) => evlp.run(callback),

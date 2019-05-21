@@ -129,7 +129,7 @@ impl<T: 'static> EventLoop<T> {
     }
 
     pub fn run<F>(mut self, event_handler: F) -> !
-        where F: 'static + FnMut(Event<T>, &RootELW<T>, &mut ControlFlow)
+        where F: FnMut(Event<T>, &RootELW<T>, &mut ControlFlow)
     {
         self.run_return(event_handler);
         ::std::process::exit(0);
