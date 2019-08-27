@@ -514,11 +514,21 @@ impl<T: 'static> EventProcessor<T> {
                 // When a compose sequence or IME pre-edit is finished, it ends in a KeyPress with
                 // a keycode of 0.
                 if xkev.keycode != 0 {
-                    let modifiers = ModifiersState {
-                        alt: xkev.state & ffi::Mod1Mask != 0,
-                        shift: xkev.state & ffi::ShiftMask != 0,
-                        ctrl: xkev.state & ffi::ControlMask != 0,
-                        logo: xkev.state & ffi::Mod4Mask != 0,
+                    let modifiers = unsafe {
+                        let mut state = std::mem::MaybeUninit::uninit();
+                        (wt.xconn.xlib.XkbGetState)(
+                            xkev.display,
+                            device as u32,
+                            state.as_mut_ptr(),
+                        );
+                        let state = state.assume_init().mods as u32;
+
+                        ModifiersState {
+                            alt: state & ffi::Mod1Mask != 0,
+                            shift: state & ffi::ShiftMask != 0,
+                            ctrl: state & ffi::ControlMask != 0,
+                            logo: state & ffi::Mod4Mask != 0,
+                        }
                     };
 
                     let keysym = unsafe {
