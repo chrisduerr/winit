@@ -26,7 +26,7 @@ const KEYCODE_OFFSET: u8 = 8;
 pub(super) struct EventProcessor<T: 'static> {
     pub(super) dnd: Dnd,
     pub(super) ime_receiver: ImeReceiver,
-    pub(super) randr_event_offset: c_int,
+    pub(super) randr_event_offset: Option<c_int>,
     pub(super) devices: RefCell<HashMap<DeviceId, Device>>,
     pub(super) xi2ext: XExtension,
     pub(super) target: Rc<RootELW<T>>,
@@ -1158,7 +1158,7 @@ impl<T: 'static> EventProcessor<T> {
                 }
             }
             _ => {
-                if event_type == self.randr_event_offset {
+                if Some(event_type) == self.randr_event_offset {
                     // In the future, it would be quite easy to emit monitor hotplug events.
                     let prev_list = monitor::invalidate_cached_monitor_list();
                     if let Some(prev_list) = prev_list {

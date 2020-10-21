@@ -290,10 +290,15 @@ impl XConnection {
             let mut minor = 0;
             (self.xrandr.XRRQueryVersion)(self.display, &mut major, &mut minor)
         };
-        assert!(
-            has_xrandr == True,
-            "[winit] XRandR extension not available."
-        );
+
+        if has_xrandr != True {
+            return Err(XError {
+                description: String::from("RandR extension missing"),
+                error_code: 0,
+                request_code: 0,
+                minor_code: 0,
+            });
+        }
 
         let mut event_offset = 0;
         let mut error_offset = 0;

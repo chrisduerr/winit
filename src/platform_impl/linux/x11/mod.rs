@@ -136,7 +136,7 @@ impl<T: 'static> EventLoop<T> {
 
         let randr_event_offset = xconn
             .select_xrandr_input(root)
-            .expect("Failed to query XRandR extension");
+            .ok();
 
         let xi2ext = unsafe {
             let mut ext = XExtension::default();
